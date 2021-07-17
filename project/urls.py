@@ -16,10 +16,17 @@ Including another URLconf
 from django.contrib import admin
 from django.conf import settings
 from django.urls import include, path
+from rest_framework.urlpatterns import format_suffix_patterns
+from core import views 
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('api-auth/', include('rest_framework.urls')),
+    path('books/', views.BookList.as_view()),
+    path('books/<int:pk>/', views.BookDetail.as_view()),
 ]
+
+urlpatterns = format_suffix_patterns(urlpatterns)
 
 if settings.DEBUG:
     import debug_toolbar
