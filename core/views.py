@@ -1,6 +1,7 @@
-from rest_framework import generics
-from .models import Book 
-from project.serializers import BookSerializer
+from rest_framework import generics, permissions
+from .models import Book, User
+from project.serializers import BookSerializer, UserSerializer
+
 
 # Create your views here.
 
@@ -8,8 +9,25 @@ from project.serializers import BookSerializer
 class BookList(generics.ListCreateAPIView):
     queryset = Book.objects.all()
     serializer_class = BookSerializer
+    permission_classes = (permissions.IsAuthenticatedOrReadOnly,)
+
+
+    def perform_create(self, serializer):
+        serializer.save(reader=self.request.user)
 
 
 class BookDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = Book.objects.all()
     serializer_class = BookSerializer
+    permission_classes = (permissions.IsAuthenticatedOrReadOnly,)
+
+
+class UserList(generics.ListAPIView):
+    queryset = User.objects.all()
+    serializer_class = UserSerializer
+
+
+class UserDetail(generics.RetrieveAPIView): 
+    queryset = User.objects.all()
+    serializer_class = UserSerializer
+
