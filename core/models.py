@@ -18,6 +18,11 @@ class Book(models.Model):
     reader = models.ForeignKey( settings.AUTH_USER_MODEL, related_name='books', on_delete=models.CASCADE)
     review = models.TextField(blank=True)
 
+    class Meta:
+        unique_together = ['author', 'title']
+        ordering = ['title']
+
     def __str__(self):
         return self.title
+
 
